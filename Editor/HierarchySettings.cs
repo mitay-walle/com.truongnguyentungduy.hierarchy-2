@@ -833,7 +833,7 @@ namespace Hierarchy2
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
             EditorUtility.FocusProjectWindow();
-            Selection.activeObject = settings;
+            Selection.activeObject = settings = AssetDatabase.LoadAssetAtPath<HierarchySettings>(path);
             return settings;
         }
 
