@@ -820,19 +820,21 @@ namespace Hierarchy2
 
         internal static HierarchySettings CreateAssets()
         {
-            string path = EditorUtility.SaveFilePanelInProject("Save as...", "Hierarchy 2 Settings", "asset", "");
-            if (path.Length > 0)
+            if (!AssetDatabase.IsValidFolder("Assets/Editor Default Resources"))
             {
-                HierarchySettings settings = ScriptableObject.CreateInstance<HierarchySettings>();
-                AssetDatabase.CreateAsset(settings, path);
+                AssetDatabase.CreateFolder("Assets","Editor Default Resources");
                 AssetDatabase.SaveAssets();
                 AssetDatabase.Refresh();
-                EditorUtility.FocusProjectWindow();
-                Selection.activeObject = settings;
-                return settings;
             }
 
-            return null;
+            string path = "Assets/Editor Default Resources";
+            HierarchySettings settings = Instantiate(AssetDatabase.LoadAssetAtPath<HierarchySettings>("Packages/com.truongnguyentungduy.hierarchy-2/DefaultSettings/HierarchySettings.asset"));
+            AssetDatabase.CreateAsset(settings, path);
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+            EditorUtility.FocusProjectWindow();
+            Selection.activeObject = settings;
+            return settings;
         }
 
         internal bool ImportFromJson()
