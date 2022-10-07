@@ -806,7 +806,7 @@ namespace Hierarchy2
             if (instance != null)
                 return instance;
 
-            var guids = AssetDatabase.FindAssets(string.Format("t:{0}", typeof(HierarchySettings).Name));
+            var guids = AssetDatabase.FindAssets($"t:{nameof(HierarchySettings)}",new [] {"Assets"});
 
             for (int i = 0; i < guids.Length; i++)
             {
@@ -827,7 +827,7 @@ namespace Hierarchy2
                 AssetDatabase.Refresh();
             }
 
-            string path = "Assets/Editor Default Resources";
+            string path = "Assets/Editor Default Resources/HierarchySettings.asset";
             HierarchySettings settings = Instantiate(AssetDatabase.LoadAssetAtPath<HierarchySettings>("Packages/com.truongnguyentungduy.hierarchy-2/DefaultSettings/HierarchySettings.asset"));
             AssetDatabase.CreateAsset(settings, path);
             AssetDatabase.SaveAssets();
