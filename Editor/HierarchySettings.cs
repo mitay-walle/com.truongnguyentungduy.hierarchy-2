@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEditor;
 using UnityEditor.UIElements;
-using UnityEngine.Serialization;
 using System.IO;
 
 namespace Hierarchy2
@@ -13,6 +11,8 @@ namespace Hierarchy2
     [Serializable]
     internal class HierarchySettings : ScriptableObject
     {
+        public bool IsPackageAsset = true;
+        
         [Serializable]
         public struct ThemeData
         {
@@ -803,7 +803,7 @@ namespace Hierarchy2
 
         internal static HierarchySettings GetAssets()
         {
-            if (instance != null)
+            if (instance != null && !instance.IsPackageAsset)
                 return instance;
 
             var guids = AssetDatabase.FindAssets($"t:{nameof(HierarchySettings)}",new [] {"Assets"});
@@ -829,6 +829,7 @@ namespace Hierarchy2
 
             string path = "Assets/Editor Default Resources/HierarchySettings.asset";
             HierarchySettings settings = Instantiate(AssetDatabase.LoadAssetAtPath<HierarchySettings>("Packages/com.truongnguyentungduy.hierarchy-2/DefaultSettings/HierarchySettings.asset"));
+            settings.IsPackageAsset = false;
             AssetDatabase.CreateAsset(settings, path);
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
