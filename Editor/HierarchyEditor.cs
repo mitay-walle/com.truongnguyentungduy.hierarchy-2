@@ -37,6 +37,7 @@ namespace Hierarchy2
         Dictionary<int, UnityEngine.Object> selectedComponents = new Dictionary<int, UnityEngine.Object>();
         Dictionary<string, string> dicComponents = new Dictionary<string, string>(StringComparer.Ordinal);
         Dictionary<string, string> dicBaseComponents = new Dictionary<string, string>(StringComparer.Ordinal);
+        Dictionary<Type, bool> monoHasIcon = new Dictionary<Type, bool>();
         UnityEngine.Object activeComponent;
 
         GUIContent tooltipContent = new GUIContent();
@@ -942,12 +943,19 @@ namespace Hierarchy2
 
                     if (comType != null)
                     {
-                        bool isMono = false;
-                        if (comType.BaseType == typeof(MonoBehaviour)) isMono = true;
+                        bool isMono = comType.IsSubclassOf(typeof(MonoBehaviour));
+                        
                         if (isMono)
                         {
                             //TODO: ???
-                            bool shouldIgnoreThisMono = false;
+                            if (!monoHasIcon.ContainsKey(comType))
+                            {
+                                Texture2D icon = (AssetImporter.GetAtPath(AssetDatabase.GetAssetPath(MonoScript.FromMonoBehaviour(component as MonoBehaviour))) as MonoImporter).GetIcon();
+                                Debug.Log($"{comType.Name} | {(icon != null ? icon.name : "null")}");
+                                monoHasIcon.Add(comType,icon);
+                            }
+
+                            bool shouldIgnoreThisMono = !monoHasIcon[comType];
                             if (shouldIgnoreThisMono) continue;
                         }
 
@@ -995,7 +1003,7 @@ namespace Hierarchy2
 
                                 if (settings.componentAlignment == HierarchySettings.ElementAlignment.AfterName)
                                     rect = RectFromLeft(rowItem.nameRect, settings.componentSize,
-                                        ref widthUse.afterName);
+                                                        ref widthUse.afterName);
                                 else
                                     rect = RectFromRight(rowItem.rect, settings.componentSize, ref widthUse.right);
                             }

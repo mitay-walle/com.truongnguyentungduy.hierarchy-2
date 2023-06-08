@@ -156,6 +156,8 @@ namespace Hierarchy2
                     verticalLayout.Add(componentDisplayMode);
 
                     var componentListInput = new TextField("Components");
+                    componentListInput.multiline = true;
+                    componentListInput.SetVerticalScrollerVisibility(ScrollerVisibility.Auto);
                     componentListInput.value = string.Join(" ", settings.components);
                     componentListInput.StyleMarginLeft(CONTENT_MARGIN_LEFT);
                     verticalLayout.Add(componentListInput);
