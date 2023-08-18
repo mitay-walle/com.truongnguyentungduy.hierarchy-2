@@ -951,7 +951,6 @@ namespace Hierarchy2
                             if (!monoHasIcon.ContainsKey(comType))
                             {
                                 Texture2D icon = (AssetImporter.GetAtPath(AssetDatabase.GetAssetPath(MonoScript.FromMonoBehaviour(component as MonoBehaviour))) as MonoImporter).GetIcon();
-                                Debug.Log($"{comType.Name} | {(icon != null ? icon.name : "null")}");
                                 monoHasIcon.Add(comType,icon);
                             }
 
